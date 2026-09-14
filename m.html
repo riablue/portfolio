@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<script src="./supabase-config.js"></script>
+<script src="./works-store.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400&family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;1,6..96,400&family=Archivo+Black&family=Pinyon+Script&family=Jost:wght@400;500&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  html { scroll-behavior: smooth; }
+  body { margin: 0; background: #e6e9ed; }
+  a { color: #6f7379; text-decoration: none; }
+  a:hover { color: #d17ab0; }
+  ::selection { background: #f0bcd9; color: #2f2f2e; }
+  @keyframes tw-blink { 0%,49% { visibility: visible } 50%,100% { visibility: hidden } }
+</style>
+</helmet>
+<div style="--accent: {{ accent }}; width:100%; max-width:390px; margin:0 auto; background:#f4f6f8; color:#3a3a38; font-family:'Space Mono',ui-monospace,monospace; overflow-x:clip; min-height:100vh">
+
+  <svg width="0" height="0" aria-hidden="true" style="position:absolute">
+    <filter id="m-spray-far" x="-25%" y="-25%" width="150%" height="150%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.72" numOctaves="4" seed="7" result="n"></feTurbulence>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="18" xChannelSelector="R" yChannelSelector="G"></feDisplacementMap>
+    </filter>
+    <filter id="m-spray-mid" x="-20%" y="-20%" width="140%" height="140%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="3" seed="3" result="n"></feTurbulence>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="8" xChannelSelector="R" yChannelSelector="G"></feDisplacementMap>
+    </filter>
+    <filter id="m-spray-near" x="-12%" y="-12%" width="124%" height="124%">
+      <feTurbulence type="fractalNoise" baseFrequency="1.4" numOctaves="2" seed="11" result="n"></feTurbulence>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="2.2" xChannelSelector="R" yChannelSelector="G"></feDisplacementMap>
+    </filter>
+    <filter id="m-orbit-ink" x="-8%" y="-30%" width="116%" height="160%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="3" seed="5" result="n"></feTurbulence>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="3.2" xChannelSelector="R" yChannelSelector="G" result="warp"></feDisplacementMap>
+      <feTurbulence type="fractalNoise" baseFrequency="0.42" numOctaves="2" seed="11" result="m"></feTurbulence>
+      <feComponentTransfer in="m" result="mask"><feFuncA type="linear" slope="1.5" intercept="-0.18"></feFuncA></feComponentTransfer>
+      <feComposite in="warp" in2="mask" operator="out"></feComposite>
+    </filter>
+  </svg>
+
+  <header style="position:sticky; top:0; z-index:40; background:#f4f6f8">
+    <div style="display:flex; align-items:center; justify-content:space-between; gap:10px; padding:12px 16px 0">
+      <a href="#top" style="display:flex; align-items:center"><img src="assets/ria-logo.png" alt="ria" style="height:22px; width:auto; display:block"></a>
+      <a href="#contact" style="display:flex; align-items:center; gap:6px; font-family:'Jost',sans-serif; font-size:14px; color:#5a5d63">got some ideas? <span style="color:#4a4d52">↗</span></a>
+    </div>
+    <div style="display:flex; align-items:baseline; justify-content:space-between; gap:12px; padding:8px 16px 8px; font-size:9px; letter-spacing:.16em; text-transform:uppercase; color:#8d9095">
+      <span>Independent creative</span>
+      <span>Los Angeles, CA</span>
+    </div>
+    <div style="height:1px; margin:0 16px; background:#6f7379"></div>
+  </header>
+
+  <div id="top" style="position:relative; min-height:calc(100vh - 76px)">
+    <div style="position:absolute; inset:0; z-index:0; pointer-events:none; overflow:hidden">
+      <div style="position:absolute; top:46%; left:50%; transform:translate(-50%,-50%); width:78%; aspect-ratio:1">
+        <div data-star-group style="position:absolute; inset:0; opacity:0; transform-origin:center; will-change:opacity,transform">
+          <img data-star src="assets/star-main.png" alt="" aria-hidden="true" style="position:absolute; inset:0; width:100%; height:100%; opacity:.28; transform:scale(0); transform-origin:50% 50%; will-change:transform">
+          <img data-spark="a" src="assets/spark-1.png" alt="" aria-hidden="true" style="position:absolute; left:8.33%; top:10.47%; width:20.24%; height:20.93%; opacity:.28; transform:scale(0); transform-origin:50% 50%; will-change:transform">
+          <img data-spark="b" src="assets/spark-2.png" alt="" aria-hidden="true" style="position:absolute; left:61.31%; top:63.95%; width:17.86%; height:17.44%; opacity:.28; transform:scale(0); transform-origin:50% 50%; will-change:transform">
+        </div>
+      </div>
+    </div>
+
+    <section style="position:relative; z-index:1; min-height:calc(100vh - 76px); display:grid; grid-template-rows:auto 1fr auto; padding:0 16px 16px; box-sizing:border-box">
+      <div style="display:flex; flex-direction:column; gap:2px; padding:12px 0 0; font-size:10px; letter-spacing:.1em; color:#8d9095">
+        <span style="font-family:'Courier Prime',ui-monospace,monospace; letter-spacing:.06em; color:#585b60">a little curious, a lot of ideas.</span>
+        <span style="letter-spacing:.16em">PORTFOLIO&nbsp; /&nbsp; 2026</span>
+      </div>
+
+      <div style="display:grid; align-content:center; gap:4px; min-height:0">
+        <h1 data-reveal style="position:relative; margin:0; font-family:'Archivo Black',sans-serif; font-weight:400; font-size:clamp(58px,20vw,92px); line-height:.86; letter-spacing:-.035em; text-align:center; color:#5a5d63; isolation:isolate">
+          <span aria-hidden="true" style="position:absolute; inset:0; filter:blur(8px) url(#m-spray-far); opacity:.42; color:#5a5d63">RIA<br>HAN</span>
+          <span aria-hidden="true" style="position:absolute; inset:0; filter:blur(2.5px) url(#m-spray-mid); opacity:.6; color:#5a5d63">RIA<br>HAN</span>
+          <span style="position:relative; color:#5a5d63; filter:blur(.4px) url(#m-spray-near)">RIA<br>HAN</span>
+        </h1>
+
+        <div data-reveal style="font-family:'Pinyon Script',cursive; font-size:clamp(42px,13vw,62px); line-height:.9; color:var(--accent,#e29ec8); text-align:center; white-space:nowrap">where a vision</div>
+
+        <ol data-reveal style="list-style:none; margin:14px 0 0; padding:0; display:grid; grid-template-columns:1fr 1fr; gap:2px 12px; font-size:10px; letter-spacing:.12em; line-height:2; color:#8d9095">
+          <li><span style="color:var(--accent,#e29ec8)">01</span>&nbsp; /&nbsp; CONTENT</li>
+          <li><span style="color:var(--accent,#e29ec8)">02</span>&nbsp; /&nbsp; STYLING</li>
+          <li><span style="color:var(--accent,#e29ec8)">03</span>&nbsp; /&nbsp; PRODUCTION</li>
+          <li><span style="color:var(--accent,#e29ec8)">04</span>&nbsp; /&nbsp; EDITORIAL</li>
+        </ol>
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:10px">
+        <h2 data-reveal style="margin:0; font-family:'Archivo Black',sans-serif; font-weight:400; font-size:clamp(22px,7.4vw,32px); letter-spacing:-.03em; color:#5a5d63">takes shape<span style="color:var(--accent,#e29ec8); font-family:'Space Mono',monospace; font-size:.78em">✳</span></h2>
+
+        <p data-reveal style="margin:0; font-size:11px; line-height:1.8; color:#8d9095">Content, styling &amp; creative production<br>Los Angeles, CA</p>
+      </div>
+    </section>
+  </div>
+
+  <section id="about" style="padding:16px 0 0; scroll-margin-top:38px">
+    <div style="display:flex; align-items:center; gap:8px; padding:0 6px; color:#3a3a38">
+      <svg width="12" height="12" viewBox="0 0 14 14" aria-hidden="true" style="flex:none"><path d="M7 0v14M0 7h14" stroke="#3a3a38" stroke-width="1"></path></svg>
+      <div style="flex:1; display:flex; align-items:center; justify-content:space-between; gap:12px; border-top:1px solid #3a3a38; border-bottom:1px solid #3a3a38; padding:3px 0; font-family:'Courier Prime',ui-monospace,monospace; font-size:10px; letter-spacing:.14em; line-height:1.2; color:#4a4d52">
+        <span>ME, IN BRIEF</span>
+        <span>LOS ANGELES, CA</span>
+      </div>
+      <svg width="12" height="12" viewBox="0 0 14 14" aria-hidden="true" style="flex:none"><path d="M7 0v14M0 7h14" stroke="#3a3a38" stroke-width="1"></path></svg>
+    </div>
+
+    <div data-reveal style="margin-top:14px; padding:0 16px; display:flex; gap:10px">
+      <div aria-hidden="true" style="align-self:stretch; flex:none; display:flex; align-items:center; justify-content:center"><span style="writing-mode:vertical-rl; transform:rotate(180deg); font-family:'Courier Prime',ui-monospace,monospace; font-size:8px; letter-spacing:.16em; color:#4a4d52; white-space:nowrap">beauty · fashion · creativity</span></div>
+      <div data-about-stage style="position:relative; width:100%; aspect-ratio:771/710; overflow:hidden">
+        <svg data-about-orbit viewBox="0 0 771 710" aria-hidden="true" style="position:absolute; inset:0; width:100%; height:100%; overflow:hidden">
+          <path data-about-frame d="M62 660 L62 59 L687 59 L687 660" fill="none" stroke="var(--accent,#e29ec8)" stroke-width="2" vector-effect="non-scaling-stroke" opacity="0"></path>
+          <ellipse cx="385" cy="295" rx="360" ry="76" transform="rotate(-11 385 295)" pathLength="100" fill="none" stroke="var(--accent,#e29ec8)" stroke-width="2" vector-effect="non-scaling-stroke" stroke-dasharray="100" stroke-dashoffset="100" filter="url(#m-orbit-ink)"></ellipse>
+        </svg>
+        <img data-about-star src="assets/spark-1.png" alt="" aria-hidden="true" style="position:absolute; left:11%; top:22%; width:14%; opacity:0">
+        <div style="position:absolute; inset:0; overflow:hidden; z-index:2">
+          <img data-about-person-mask src="assets/person5-mask.png" alt="" aria-hidden="true" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:top center; display:block; transform:translateY(14%); will-change:transform; padding-top:4%; box-sizing:border-box">
+          <img data-about-person src="assets/person5.png" alt="Portrait of Ria Han" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:top center; display:block; transform:translateY(14%); will-change:transform; padding-top:4%; box-sizing:border-box">
+        </div>
+      </div>
+    </div>
+    <div style="display:flex; align-items:center; gap:8px; padding:0 6px; margin-top:0; color:#3a3a38">
+      <svg width="12" height="12" viewBox="0 0 14 14" aria-hidden="true" style="flex:none"><path d="M7 0v14M0 7h14" stroke="#3a3a38" stroke-width="1"></path></svg>
+      <span style="flex:1; height:1px; background:#3a3a38"></span>
+      <svg width="12" height="12" viewBox="0 0 14 14" aria-hidden="true" style="flex:none"><path d="M7 0v14M0 7h14" stroke="#3a3a38" stroke-width="1"></path></svg>
+    </div>
+
+    <div data-reveal style="padding:22px 16px 0">
+      <div style="position:relative; font-family:'Bodoni Moda','Didot',serif; font-weight:400; font-size:clamp(40px,13vw,58px); line-height:.82; letter-spacing:-.03em; color:#5a5d63">
+        <div style="display:flex; justify-content:space-between; align-items:baseline; gap:.5em; padding-right:.1em"><span>in front</span><span style="font-size:.5em; letter-spacing:-.01em">of the</span></div>
+        <div style="padding-left:2.3em; margin-top:-.06em"><span style="position:relative; display:inline-block; padding:0 .08em; isolation:isolate"><span aria-hidden="true" style="position:absolute; left:-.1em; right:-.1em; top:22%; bottom:14%; z-index:-1; background:var(--accent,#e29ec8); opacity:.34; filter:blur(1.5px) url(#m-spray-near)"></span><span aria-hidden="true" style="position:absolute; left:-.2em; right:-.25em; top:14%; bottom:6%; z-index:-1; background:var(--accent,#e29ec8); opacity:.16; filter:blur(6px) url(#m-spray-mid)"></span>camera</span></div>
+      </div>
+      <div data-typewriter="behind the|whole thing." style="font-family:'Pinyon Script',cursive; font-size:clamp(30px,9.6vw,42px); line-height:.9; color:var(--accent,#e29ec8); margin-top:-.28em; min-height:1.9em; display:block; position:relative; z-index:1">behind the<br>whole thing.</div>
+      <div style="margin-top:.2em; height:1px; background:#3a3a38"></div>
+      <div style="display:grid; grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr); margin-top:14px">
+        <p style="margin:0; padding-right:12px; font-family:'Bodoni Moda','Didot',serif; color:#6f7379; font-size:15px; line-height:1.35; text-wrap:pretty">I’m Ria, a creative based in Los Angeles.</p>
+        <p style="margin:0; padding-left:12px; border-left:1px solid #3a3a38; font-family:'Bodoni Moda','Didot',serif; color:#6f7379; font-size:15px; line-height:1.35; text-wrap:pretty">I work across <em>beauty, fashion</em> and <em>creative production</em>, bringing a hands-on approach to everything from personal experiments to collaborative shoots.</p>
+      </div>
+      <img src="assets/signature.png" alt="Ria" style="display:block; margin:10px 0 0 auto; width:84px; height:auto; opacity:.85">
+    </div>
+
+    <h2 data-reveal style="margin:26px 16px 0; font-family:'Archivo Black',sans-serif; font-weight:400; font-size:clamp(26px,8.6vw,38px); letter-spacing:-.035em; color:#5a5d63">take a closer look.<span style="color:var(--accent,#e29ec8); font-family:'Space Mono',monospace; font-size:.72em">✳</span></h2>
+  </section>
+
+  <section id="work" style="padding:28px 16px 24px">
+    <div style="display:flex; justify-content:space-between; gap:12px; font-size:10px; letter-spacing:.16em; color:#8d9095; padding-bottom:16px">
+      <span>SELECTED WORK</span>
+      <span>WORK&nbsp; /&nbsp; 04</span>
+    </div>
+
+    <div data-reveal style="position:relative; width:100%; aspect-ratio:1043/1410; margin:0 auto">
+      <img src="assets/work-grid-gray.png" alt="" aria-hidden="true" style="display:block; width:100%; height:100%">
+      <div data-tiles style="position:absolute; inset:0; perspective:800px">
+        <sc-for list="{{ tiles }}" as="tile" hint-placeholder-count="43">
+          <div data-tile style="position:absolute; left:{{ tile.l }}; top:{{ tile.t }}; width:8.3334%; height:6.25%; background-image:url(assets/work-grid-cells.png); background-size:1200% 1600%; background-position:{{ tile.bg }}; opacity:0; transform:rotateY(90deg); transform-origin:center; transition:opacity .28s ease, transform .42s cubic-bezier(.2,.8,.3,1); backface-visibility:hidden"></div>
+        </sc-for>
+      </div>
+      <div style="position:absolute; inset:0">
+        <a data-cat="CONTENT" onClick="{{ openCat }}" title="CONTENT" style="position:absolute; left:25.22%; top:6.31%; width:58.1%; height:6.17%; cursor:pointer" style-active="background:rgba(226,158,200,.34)" style-hover="background:rgba(226,158,200,.18)"><span style="position:absolute; inset:0; overflow:hidden; clip-path:inset(50%)">CONTENT</span></a>
+        <a data-cat="EDITORIAL" onClick="{{ openCat }}" title="EDITORIAL" style="position:absolute; left:58.49%; top:6.38%; width:8.25%; height:56.1%; cursor:pointer" style-active="background:rgba(226,158,200,.34)" style-hover="background:rgba(226,158,200,.18)"><span style="position:absolute; inset:0; overflow:hidden; clip-path:inset(50%)">EDITORIAL</span></a>
+        <a data-cat="STYLING" onClick="{{ openCat }}" title="STYLING" style="position:absolute; left:41.8%; top:25.11%; width:8.25%; height:43.62%; cursor:pointer" style-active="background:rgba(226,158,200,.34)" style-hover="background:rgba(226,158,200,.18)"><span style="position:absolute; inset:0; overflow:hidden; clip-path:inset(50%)">STYLING</span></a>
+        <a data-cat="PRODUCTION" onClick="{{ openCat }}" title="PRODUCTION" style="position:absolute; left:8.53%; top:81.42%; width:83.22%; height:6.1%; cursor:pointer" style-active="background:rgba(226,158,200,.34)" style-hover="background:rgba(226,158,200,.18)"><span style="position:absolute; inset:0; overflow:hidden; clip-path:inset(50%)">PRODUCTION</span></a>
+      </div>
+    </div>
+    <div style="margin:8px 0 0; font-size:9px; letter-spacing:.12em; color:#a4a7ab">GRID&nbsp; /&nbsp; TAP A CATEGORY</div>
+
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:0 16px; margin-top:20px">
+      <a data-cat="CONTENT" onClick="{{ openCat }}" href="#work" style="display:flex; align-items:baseline; gap:10px; min-height:44px; padding:0 2px; font-family:'Space Mono',monospace; font-size:13px; color:#5a5d63; text-decoration:none" style-active="color:#2f4a68; background:rgba(226,158,200,.22)" style-hover="color:#2f4a68"><span style="color:#a4a7ab; font-size:11px; min-width:16px">1</span>Content<span style="color:var(--accent,#e29ec8); font-size:10px">↗</span></a>
+      <a data-cat="STYLING" onClick="{{ openCat }}" href="#work" style="display:flex; align-items:baseline; gap:10px; min-height:44px; padding:0 2px; font-family:'Space Mono',monospace; font-size:13px; color:#5a5d63; text-decoration:none" style-active="color:#2f4a68; background:rgba(226,158,200,.22)" style-hover="color:#2f4a68"><span style="color:#a4a7ab; font-size:11px; min-width:16px">2</span>Styling<span style="color:var(--accent,#e29ec8); font-size:10px">↗</span></a>
+      <a data-cat="PRODUCTION" onClick="{{ openCat }}" href="#work" style="display:flex; align-items:baseline; gap:10px; min-height:44px; padding:0 2px; font-family:'Space Mono',monospace; font-size:13px; color:#5a5d63; text-decoration:none" style-active="color:#2f4a68; background:rgba(226,158,200,.22)" style-hover="color:#2f4a68"><span style="color:#a4a7ab; font-size:11px; min-width:16px">3</span>Production<span style="color:var(--accent,#e29ec8); font-size:10px">↗</span></a>
+      <a data-cat="EDITORIAL" onClick="{{ openCat }}" href="#work" style="display:flex; align-items:baseline; gap:10px; min-height:44px; padding:0 2px; font-family:'Space Mono',monospace; font-size:13px; color:#5a5d63; text-decoration:none" style-active="color:#2f4a68; background:rgba(226,158,200,.22)" style-hover="color:#2f4a68"><span style="color:#a4a7ab; font-size:11px; min-width:16px">4</span>Editorial<span style="color:var(--accent,#e29ec8); font-size:10px">↗</span></a>
+    </div>
+  </section>
+
+  <section id="contact" style="background:#f4f6f8; padding:20px 16px 18px">
+    <div style="display:flex; justify-content:space-between; gap:12px; font-size:10px; letter-spacing:.16em; color:#2f4a68">
+      <span>LET’S KEEP IN TOUCH</span>
+      <span>CONTACT&nbsp; /&nbsp; 05</span>
+    </div>
+
+    <div data-reveal style="position:relative; width:100%; margin:16px auto 0">
+      <div data-env-stage style="position:relative; width:100%; aspect-ratio:1036/939">
+        <img src="assets/env-final.png" alt="An open light blue envelope with a lace-edged note: a little note for you — get some idea? let’s make things happen together. Email riablue.collab@gmail.com, Los Angeles, CA. Ria." style="position:absolute; inset:0; width:100%; height:100%">
+        <a href="mailto:riablue.collab@gmail.com" title="riablue.collab@gmail.com" style="position:absolute; left:30%; top:46.5%; width:38%; height:6%; cursor:pointer"><span style="position:absolute; inset:0; overflow:hidden; clip-path:inset(50%)">Email riablue.collab@gmail.com</span></a>
+      </div>
+    </div>
+
+    <a href="https://instagram.com/riabl.ue" target="_blank" rel="noopener" style="display:flex; align-items:center; justify-content:center; gap:8px; min-height:48px; margin-top:6px; font-family:'Space Mono',monospace; font-size:14px; color:#2f4a68; border:1px solid #c3d6e6">@riabl.ue <span>↗</span></a>
+
+    <div style="margin-top:18px; display:flex; justify-content:space-between; gap:12px; font-size:10px; letter-spacing:.1em; color:#8d9095">
+      <span>© 2026 RIA HAN</span>
+      <a href="#top">back to top ↑</a>
+    </div>
+  </section>
+
+  <sc-if value="{{ catOpen }}" hint-placeholder-val="{{ false }}">
+    <div data-cat-page style="position:fixed; top:0; bottom:0; left:50%; transform:translateX(-50%); width:100%; max-width:390px; z-index:90; background:#f4f6f8; border-left:1px solid rgba(58,58,56,.12); border-right:1px solid rgba(58,58,56,.12); display:flex; flex-direction:column; padding:16px; box-sizing:border-box; overflow:auto">
+      <div style="display:flex; align-items:center; justify-content:space-between; gap:20px; border-bottom:1px solid #3a3a38; padding-bottom:12px">
+        <div style="font-family:'Courier Prime',ui-monospace,monospace; font-size:10px; letter-spacing:.14em; color:#4a4d52; min-width:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis">{{ catLabel }}&nbsp; /&nbsp; {{ catCount }}</div>
+        <button onClick="{{ closeCat }}" style="font-family:'Jost',sans-serif; font-size:13px; color:#4a4d52; background:none; border:1px solid #3a3a38; padding:6px 10px; cursor:pointer; white-space:nowrap; flex:none" style-hover="background:#e9edf1">close ✕</button>
+      </div>
+      <div style="display:flex; align-items:baseline; gap:.4em; flex-wrap:wrap; margin-top:22px">
+        <h2 style="margin:0; font-family:'Bodoni Moda','Didot',serif; font-weight:400; font-size:clamp(40px,13vw,58px); line-height:.9; letter-spacing:-.03em; color:#5a5d63">{{ catTitle }}</h2>
+      </div>
+      <sc-if value="{{ catEmpty }}" hint-placeholder-val="{{ false }}">
+        <div style="margin-top:28px; display:grid; gap:14px">
+          <div style="font-family:'Pinyon Script',cursive; font-size:38px; color:var(--accent,#e29ec8); line-height:1">coming soon</div>
+          <p style="margin:0; font-family:'Jost',sans-serif; font-size:15px; line-height:1.6; color:#6f7379; max-width:46ch">No pieces here yet. Add them in <a href="admin.html" target="_blank" style="color:#4a4d52; text-decoration:underline">backstage</a>.</p>
+        </div>
+      </sc-if>
+      <sc-if value="{{ catHas }}" hint-placeholder-val="{{ true }}">
+        <div style="display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:34px 12px; margin-top:30px; padding-bottom:40px">
+          <sc-for list="{{ catWorks }}" as="w" hint-placeholder-count="0">
+            <a href="#" onClick="{{ w.open }}" style="display:flex; flex-direction:column; gap:14px; cursor:zoom-in; text-decoration:none; color:inherit">
+              <div style="display:flex; justify-content:center"><div style="position:relative"><div role="img" aria-label="{{ w.title }}" style="{{ w.style }}" style-hover="transform:scale(1.04)"></div><sc-if value="{{ w.isVideo }}" hint-placeholder-val="{{ false }}"><span style="position:absolute; right:6px; bottom:6px; width:22px; height:22px; border-radius:50%; background:rgba(244,246,248,.9); border:1px solid #3a3a38; display:flex; align-items:center; justify-content:center; font-size:9px; color:#3a3a38; pointer-events:none">▶</span></sc-if></div></div>
+              <div style="font-family:'Courier Prime',ui-monospace,monospace; font-size:11px; letter-spacing:.12em; color:#4a4d52">{{ w.num }}</div>
+            </a>
+          </sc-for>
+        </div>
+      </sc-if>
+    </div>
+  </sc-if>
+  <sc-if value="{{ lbOpen }}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{ closeLb }}" style="position:fixed; top:0; bottom:0; left:50%; transform:translateX(-50%); width:100%; max-width:390px; z-index:100; background:#f4f6f8; border-left:1px solid rgba(58,58,56,.12); border-right:1px solid rgba(58,58,56,.12); display:flex; flex-direction:column; padding:16px; box-sizing:border-box; overflow:auto">
+      <div style="display:flex; align-items:center; justify-content:space-between; gap:20px; border-bottom:1px solid #3a3a38; padding-bottom:12px">
+        <div style="font-family:'Courier Prime',ui-monospace,monospace; font-size:10px; letter-spacing:.14em; color:#4a4d52; min-width:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis">{{ lbNum }}&nbsp; /&nbsp; {{ catCount }}</div>
+        <div style="display:flex; gap:6px; flex:none">
+          <button onClick="{{ lbPrev }}" style="font-family:'Jost',sans-serif; font-size:13px; color:#4a4d52; background:none; border:1px solid #3a3a38; padding:6px 10px; cursor:pointer; white-space:nowrap; flex:none" style-hover="background:#e9edf1">←</button>
+          <button onClick="{{ lbNext }}" style="font-family:'Jost',sans-serif; font-size:13px; color:#4a4d52; background:none; border:1px solid #3a3a38; padding:6px 10px; cursor:pointer; white-space:nowrap; flex:none" style-hover="background:#e9edf1">→</button>
+          <button onClick="{{ closeLb }}" style="font-family:'Jost',sans-serif; font-size:13px; color:#4a4d52; background:none; border:1px solid #3a3a38; padding:6px 10px; cursor:pointer; white-space:nowrap; flex:none" style-hover="background:#e9edf1">close ✕</button>
+        </div>
+      </div>
+      <div onClick="{{ stop }}" style="flex:1; display:grid; grid-template-columns:1fr; grid-template-rows:auto auto; gap:22px; align-items:{{ lbAlign }}; padding:22px 0 40px; min-height:0">
+        <div style="display:flex; justify-content:center; align-items:center; min-height:0; position:relative; min-width:0">
+          <sc-if value="{{ lbIsVideo }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex; flex-direction:column; align-items:center; gap:10px; width:100%; align-self:start">
+              {{ lbVideo }}
+              <a href="{{ lbLink }}" target="_blank" rel="noopener" style="font-family:'Courier Prime',ui-monospace,monospace; font-size:10px; letter-spacing:.14em; color:#4a4d52">OPEN ON INSTAGRAM ↗</a>
+            </div>
+          </sc-if>
+          <div data-gallery onScroll="{{ galScroll }}" style="display:{{ galDisplay }}; width:100%; overflow-x:auto; overflow-y:hidden; scroll-snap-type:x mandatory; scrollbar-width:none; -webkit-overflow-scrolling:touch">
+            <sc-for list="{{ lbImages }}" as="im" hint-placeholder-count="0">
+              <div style="flex:0 0 100%; scroll-snap-align:center; scroll-snap-stop:always; display:flex; justify-content:center; align-items:center; min-width:0"><div role="img" aria-label="{{ lbTitle }}" style="{{ im.style }}"></div></div>
+            </sc-for>
+          </div>
+          <sc-if value="{{ lbMulti }}" hint-placeholder-val="{{ false }}">
+            <button onClick="{{ galPrev }}" aria-label="previous image" style="position:absolute; left:4px; top:50%; transform:translateY(-50%); width:36px; height:36px; border-radius:50%; border:1px solid #3a3a38; background:rgba(244,246,248,.86); color:#4a4d52; cursor:pointer; font-size:14px; display:flex; align-items:center; justify-content:center" style-hover="background:#e9edf1">←</button>
+            <button onClick="{{ galNext }}" aria-label="next image" style="position:absolute; right:4px; top:50%; transform:translateY(-50%); width:36px; height:36px; border-radius:50%; border:1px solid #3a3a38; background:rgba(244,246,248,.86); color:#4a4d52; cursor:pointer; font-size:14px; display:flex; align-items:center; justify-content:center" style-hover="background:#e9edf1">→</button>
+            <div style="position:absolute; left:50%; bottom:-22px; transform:translateX(-50%); display:flex; align-items:center; gap:6px">
+              <sc-for list="{{ lbDots }}" as="d" hint-placeholder-count="0"><span onClick="{{ d.go }}" style="width:6px; height:6px; border-radius:50%; background:{{ d.bg }}; cursor:pointer; border:1px solid #3a3a38; box-sizing:border-box"></span></sc-for>
+            </div>
+          </sc-if>
+        </div>
+        <div style="display:flex; flex-direction:column; gap:14px; max-width:none">
+          <div style="font-family:'Courier Prime',ui-monospace,monospace; font-size:11px; letter-spacing:.16em; color:#4a4d52">{{ lbNum }}<sc-if value="{{ lbMulti }}" hint-placeholder-val="{{ false }}">&nbsp; ·&nbsp; {{ lbImgPos }}</sc-if></div>
+          <h3 style="margin:0; font-family:'Bodoni Moda','Didot',serif; font-weight:400; font-size:clamp(26px,8vw,36px); line-height:1.02; letter-spacing:-.02em; color:#5a5d63; text-wrap:balance">{{ lbTitle }}</h3>
+          <div style="height:1px; background:#3a3a38; width:64px"></div>
+          <p style="margin:0; font-family:'Jost',sans-serif; font-size:15px; line-height:1.65; color:#6f7379; white-space:pre-wrap; text-wrap:pretty">{{ lbDesc }}</p>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:390,&quot;height&quot;:844},&quot;accent&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;#e29ec8&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;options&quot;:[&quot;#e29ec8&quot;,&quot;#d97aa8&quot;,&quot;#c8a6e0&quot;,&quot;#8fb4d9&quot;],&quot;section&quot;:&quot;Look&quot;},&quot;revealOnScroll&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Motion&quot;}}">
+class Component extends DCLogic {
+  state = { cat: null, works: null, lb: null, gi: 0 };
+  igEmbed(link) {
+    if (!link) return '';
+    const m = String(link).match(/instagram\.com\/(?:[^/]+\/)?(p|reel|reels|tv)\/([A-Za-z0-9_-]+)/i);
+    if (!m) return '';
+    const type = m[1].toLowerCase() === 'reels' ? 'reel' : m[1].toLowerCase();
+    return 'https://www.instagram.com/' + type + '/' + m[2] + '/embed/';
+  }
+  galTo(i, smooth) {
+    const g = document.querySelector('[data-gallery]');
+    if (!g) return;
+    const n = g.children.length; if (!n) return;
+    const k = (i + n) % n;
+    g.scrollTo({ left: k * g.clientWidth, behavior: smooth === false ? 'auto' : 'smooth' });
+    this.setState({ gi: k });
+  }
+  async loadWorks() {
+    if (!window.RiaWorks) { setTimeout(() => this.loadWorks(), 200); return; }
+    try { const works = await window.RiaWorks.all(); this.setState({ works }); } catch (e) { this.setState({ works: {} }); }
+    if (!this._worksBound) { this._worksBound = true; window.RiaWorks.onChange(() => this.loadWorks()); }
+  }
+  initFlipGrid() {
+    const host = document.querySelector('[data-tiles]');
+    const section = document.querySelector('#work');
+    if (!host || !section) return;
+    const tiles = Array.from(host.querySelectorAll('[data-tile]'));
+    if (!tiles.length) { setTimeout(() => this.initFlipGrid(), 300); return; }
+    let seed = 20260913;
+    const rnd = () => { seed = (seed * 1664525 + 1013904223) % 4294967296; return seed / 4294967296; };
+    const order = tiles.map((el, i) => i);
+    for (let i = order.length - 1; i > 0; i--) {
+      const j = Math.floor(rnd() * (i + 1));
+      const t = order[i]; order[i] = order[j]; order[j] = t;
+    }
+    let shown = -1;
+    const apply = () => {
+      const r = section.getBoundingClientRect();
+      const span = Math.max(220, r.height * 0.5);
+      const p = Math.max(0, Math.min(1, (window.innerHeight * 0.8 - r.top) / span));
+      const n = Math.round(Math.min(1, p) * order.length);
+      if (n !== shown) {
+        if (n > shown) {
+          for (let i = Math.max(0, shown); i < n; i++) {
+            const el = tiles[order[i]];
+            el.style.opacity = '1';
+            el.style.transform = 'rotateY(0deg)';
+          }
+        } else {
+          for (let i = shown - 1; i >= n; i--) {
+            const el = tiles[order[i]];
+            if (!el) continue;
+            el.style.opacity = '0';
+            el.style.transform = 'rotateY(90deg)';
+          }
+        }
+        shown = n;
+      }
+      this._flipTick = null;
+    };
+    const onScroll = () => { if (!this._flipTick) this._flipTick = requestAnimationFrame(apply); };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    apply();
+  }
+  initAboutFx() {
+    const stage = document.querySelector('[data-about-stage]');
+    if (!stage) return;
+    const person = stage.querySelector('[data-about-person]');
+    const silh = stage.querySelector('[data-about-person-mask]');
+    const orbit = stage.querySelector('[data-about-orbit] ellipse');
+    const frame = stage.querySelector('[data-about-frame]');
+    const star = stage.querySelector('[data-about-star]');
+    const ease = t => 1 - Math.pow(1 - t, 3);
+    const seg = (p, a, b) => Math.max(0, Math.min(1, (p - a) / (b - a)));
+    const apply = () => {
+      const r = stage.getBoundingClientRect();
+      const start = window.innerHeight * 0.82;
+      const end = window.innerHeight * 0.08;
+      const p = Math.max(0, Math.min(1, (start - r.top) / (start - end)));
+      const t = seg(p, 0.22, 0.66);
+      const pp = t >= 1 ? 1 : 1 - Math.pow(2, -9 * t) * Math.cos(t * 11.5);
+      const ty = 'translateY(' + (14 * (1 - pp)).toFixed(2) + '%)';
+      if (person) person.style.transform = ty;
+      if (silh) silh.style.transform = ty;
+      if (frame) frame.setAttribute('opacity', (Math.min(1, t * 1.6) * 0.9).toFixed(3));
+      if (orbit) orbit.setAttribute('stroke-dashoffset', (100 * (1 - ease(seg(p, 0.52, 0.9)))).toFixed(2));
+      if (star) {
+        const sp = seg(p, 0.4, 0.78);
+        const flick = sp <= 0 ? 0 : (sp < 1 ? (0.25 + 0.75 * Math.abs(Math.sin(sp * 16))) : 1);
+        star.style.opacity = (sp * flick).toFixed(3);
+        star.style.transform = 'scale(' + (0.7 + 0.3 * sp).toFixed(3) + ')';
+      }
+      this._aboutTick = null;
+    };
+    const onScroll = () => { if (!this._aboutTick) this._aboutTick = requestAnimationFrame(apply); };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    apply();
+  }
+  initEnvelope() {
+    const stage = document.querySelector('[data-env-stage]');
+    const out = stage && stage.querySelector('[data-env-out]');
+    if (!out) return;
+    const ease = t => 1 - Math.pow(1 - t, 3);
+    const apply = () => {
+      const r = stage.getBoundingClientRect();
+      const start = window.innerHeight * 0.84;
+      const end = window.innerHeight * 0.3;
+      const t = ease(Math.max(0, Math.min(1, (start - r.top) / (start - end))));
+      out.style.opacity = t.toFixed(3);
+      out.style.transform = 'translateY(' + (3 * (1 - t)).toFixed(2) + '%)';
+      this._envTick = null;
+    };
+    const onScroll = () => { if (!this._envTick) this._envTick = requestAnimationFrame(apply); };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    apply();
+  }
+  initScrollFx() {
+    const star = document.querySelector('[data-star]');
+    const sparkA = document.querySelector('[data-spark="a"]');
+    const sparkB = document.querySelector('[data-spark="b"]');
+    const types = Array.from(document.querySelectorAll('[data-typewriter]'));
+    types.forEach(el => {
+      el.textContent = '';
+      const txt = document.createElement('span');
+      const cur = document.createElement('span');
+      cur.textContent = '|';
+      cur.style.cssText = 'font-family:"Space Mono",monospace; font-size:.52em; margin-left:.06em; opacity:.85; animation:tw-blink 1s steps(1,end) infinite';
+      txt.style.cssText = 'display:block; white-space:pre-wrap';
+      el.appendChild(txt);
+      el._tw = txt;
+      el._cur = cur;
+    });
+    const run = () => {
+      const p = window.scrollY / Math.max(1, window.innerHeight);
+      if (star && this._starReady) star.style.opacity = (0.28 + 0.075 * Math.sin(p * 9)).toFixed(3);
+      if (sparkA && sparkB) {
+        const phase = 0.5 + 0.5 * Math.sin(p * 12);
+        sparkA.style.opacity = (0.12 + 0.32 * phase).toFixed(3);
+        sparkB.style.opacity = (0.12 + 0.32 * (1 - phase)).toFixed(3);
+      }
+      types.forEach(el => {
+        const full = el.getAttribute('data-typewriter') || '';
+        const r = el.getBoundingClientRect();
+        const start = window.innerHeight * 0.94;
+        const end = window.innerHeight * 0.46;
+        const t = Math.max(0, Math.min(1, (start - r.top) / (start - end)));
+        const n = Math.round(t * full.length);
+        const next = full.slice(0, n);
+        if (el._tw && el._tw.dataset.v !== next) {
+          el._tw.dataset.v = next;
+          const parts = next.split('|');
+          el._tw.textContent = '';
+          parts.forEach((part, i) => {
+            const line = document.createElement('span');
+            line.textContent = part;
+            line.style.cssText = i === 0 ? 'display:block' : 'display:block; padding-left:2.1em';
+            el._tw.appendChild(line);
+          });
+          if (el._cur) el._tw.lastChild.appendChild(el._cur);
+        }
+        if (el._cur) el._cur.style.opacity = (n > 0 && n < full.length) ? '.85' : '0';
+      });
+      if (this._sweep) this._sweep();
+      this._fxTick = null;
+    };
+    const onScroll = () => { if (!this._fxTick) this._fxTick = requestAnimationFrame(run); };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    run();
+    setTimeout(run, 500);
+  }
+  componentDidMount() {
+    this.loadWorks();
+    window.addEventListener('keydown', (e) => {
+      if (this.state.lb === null) { if (e.key === 'Escape' && this.state.cat) this.setState({ cat: null }); return; }
+      if (e.key === 'Escape') this.setState({ lb: null });
+      const multi = (() => { const l = (this.state.works && this.state.cat && this.state.works[this.state.cat]) || []; const w = l[this.state.lb]; return w && w.images && w.images.length > 1; })();
+      if (e.key === 'ArrowRight') { if (multi) this.galTo(this.state.gi + 1); else this.stepLb(1); }
+      if (e.key === 'ArrowLeft') { if (multi) this.galTo(this.state.gi - 1); else this.stepLb(-1); }
+    });
+    const group = document.querySelector('[data-star-group]');
+    if (group) {
+      const pop = () => {
+        group.style.transition = 'opacity .5s ease-out';
+        group.style.opacity = '1';
+        const seq = [[group.querySelector('[data-star]'), 0], [group.querySelector('[data-spark="a"]'), 560], [group.querySelector('[data-spark="b"]'), 740]];
+        seq.forEach(([el, delay]) => {
+          if (!el) return;
+          el.style.transition = 'transform 1.5s cubic-bezier(.34,1.56,.42,1) ' + delay + 'ms';
+          el.style.transform = 'scale(1)';
+        });
+        setTimeout(() => { seq.forEach(([el]) => { if (el) el.style.transition = ''; }); }, 2400);
+      };
+      requestAnimationFrame(pop);
+      setTimeout(pop, 300);
+      const blinks = [[380,.64,.15],[560,1,.17],[820,.56,.13],[970,1,.2],[1240,.62,.26],[1520,1,.34],[2040,.7,.22],[2210,1,.2],[2380,.55,.4],[2880,1,.3],[3520,.74,.24],[3700,1,.36],[4300,.66,.26],[4520,1,.6]];
+      blinks.forEach(([at, o, dur]) => setTimeout(() => {
+        group.style.transition = 'opacity ' + dur + 's ease-in-out';
+        group.style.opacity = String(o);
+      }, at));
+      setTimeout(() => { this._starReady = true; }, 5000);
+    }
+    this.initScrollFx();
+    this.initFlipGrid();
+    this.initAboutFx();
+    this.initEnvelope();
+
+    if (this.props.revealOnScroll === false) return;
+    const els = Array.from(document.querySelectorAll('[data-reveal]'));
+    if (!els.length || !('IntersectionObserver' in window)) return;
+    els.forEach(el => {
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(14px)';
+      el.style.transition = 'opacity .6s cubic-bezier(.22,.61,.36,1), transform .6s cubic-bezier(.22,.61,.36,1)';
+    });
+    const show = el => { el.style.opacity = '1'; el.style.transform = 'none'; };
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { show(e.target); io.unobserve(e.target); } });
+    }, { rootMargin: '0px 0px -6% 0px', threshold: 0.06 });
+    const sweep = () => els.forEach(el => {
+      const r = el.getBoundingClientRect();
+      if (r.top < window.innerHeight * 0.96 && r.bottom > 0) { show(el); io.unobserve(el); }
+    });
+    els.forEach(el => io.observe(el));
+    sweep();
+    setTimeout(sweep, 400);
+    this._sweep = sweep;
+    window.addEventListener('pageshow', sweep);
+    window.addEventListener('resize', sweep);
+  }
+  stepLb(d) {
+    const list = (this.state.works && this.state.cat && this.state.works[this.state.cat]) || [];
+    if (!list.length || this.state.lb === null) return;
+    this.setState({ lb: (this.state.lb + d + list.length) % list.length, gi: 0 });
+    requestAnimationFrame(() => { const g = document.querySelector('[data-gallery]'); if (g) g.scrollTo({ left: 0, behavior: 'auto' }); });
+  }
+  renderVals() {
+    const copy = { CONTENT: 'content.', STYLING: 'styling.', PRODUCTION: 'production.', EDITORIAL: 'editorial.' };
+    const list = (this.state.works && this.state.cat && this.state.works[this.state.cat]) || [];
+    const pad2 = n => String(n + 1).padStart(2, '0');
+    const cur = this.state.lb !== null ? list[this.state.lb] : null;
+    const imgs = cur ? (cur.images && cur.images.length ? cur.images : (cur.img ? [{ src: cur.img }] : [])) : [];
+    const embed = cur ? this.igEmbed(cur.link) : '';
+    return {
+      catOpen: !!this.state.cat,
+      catLabel: this.state.cat || '',
+      catTitle: copy[this.state.cat] || '',
+      catCount: pad2(list.length - 1),
+      catEmpty: !!this.state.works && list.length === 0,
+      catHas: list.length > 0,
+      catWorks: list.map((w, i) => ({ num: pad2(i), thumb: w.thumb || w.img || '', isVideo: !!this.igEmbed(w.link), style: { width: '72px', aspectRatio: '4/5', display: 'block', backgroundColor: '#e9edf1', backgroundImage: 'url("' + (w.thumb || w.img || '') + '")', backgroundSize: 'cover', backgroundPosition: 'center', transition: 'transform .35s cubic-bezier(.2,.8,.2,1)' }, title: w.title || '', open: (e) => { e.preventDefault(); this.setState({ lb: i, gi: 0 }); } })),
+      lbOpen: !!cur,
+      lbNum: cur ? pad2(this.state.lb) : '',
+      lbImg: cur ? (cur.img || cur.thumb || '') : '',
+      lbIsVideo: !!embed,
+      lbLink: cur ? (cur.link || '') : '',
+      lbVideo: embed ? React.createElement('iframe', { key: embed, src: embed, title: cur.title || 'Instagram video', allow: 'autoplay; encrypted-media; fullscreen', allowFullScreen: true, scrolling: 'no', frameBorder: '0', style: { width: '100%', maxWidth: '340px', height: 'min(72vh, 640px)', minHeight: '320px', border: '0', background: '#fff' } }) : null,
+      galDisplay: embed ? 'none' : 'flex',
+      lbAlign: embed ? 'start' : 'center',
+      lbImages: imgs.map(im => ({ src: im.src, style: { width: '100%', height: '58vh', backgroundImage: 'url("' + im.src + '")', backgroundSize: 'contain', backgroundPosition: 'center', backgroundRepeat: 'no-repeat', userSelect: 'none' } })),
+      lbMulti: !embed && imgs.length > 1,
+      lbImgPos: (this.state.gi + 1) + ' / ' + imgs.length,
+      lbDots: imgs.map((im, i) => ({ bg: i === this.state.gi ? '#3a3a38' : 'transparent', go: (e) => { e.stopPropagation(); this.galTo(i); } })),
+      galPrev: (e) => { e.stopPropagation(); this.galTo(this.state.gi - 1); },
+      galNext: (e) => { e.stopPropagation(); this.galTo(this.state.gi + 1); },
+      galScroll: (e) => {
+        const g = e.currentTarget; clearTimeout(this._galT);
+        this._galT = setTimeout(() => { const k = Math.round(g.scrollLeft / Math.max(1, g.clientWidth)); if (k !== this.state.gi) this.setState({ gi: k }); }, 80);
+      },
+      lbTitle: cur ? (cur.title || '') : '',
+      lbDesc: cur ? (cur.desc || '') : '',
+      closeLb: () => this.setState({ lb: null }),
+      lbPrev: (e) => { e.stopPropagation(); this.stepLb(-1); },
+      lbNext: (e) => { e.stopPropagation(); this.stepLb(1); },
+      stop: (e) => e.stopPropagation(),
+      openCat: (e) => {
+        e.preventDefault();
+        const a = e.currentTarget.closest('[data-cat]');
+        if (a) this.setState({ cat: a.getAttribute('data-cat') });
+      },
+      closeCat: () => this.setState({ cat: null, lb: null }),
+      accent: this.props.accent ?? '#e29ec8',
+      tiles: [0,2,11,15,16,17,18,19,20,21,31,43,47,53,55,65,67,69,77,79,89,91,101,103,106,113,115,125,131,157,158,159,160,161,162,163,164,165,166,168,182,187,191].map(i => {
+        const col = i % 12, row = Math.floor(i / 12);
+        return {
+          l: (col * 100 / 12).toFixed(4) + '%',
+          t: (row * 6.25).toFixed(4) + '%',
+          bg: (col * 100 / 11).toFixed(3) + '% ' + (row * 100 / 15).toFixed(3) + '%'
+        };
+      })
+    };
+  }
+}
+</script>
+</body>
+</html>
