@@ -177,6 +177,7 @@
     async signInWithGoogle() { await loadSb(); const redirectTo = location.origin + location.pathname; const { error } = await sb.auth.signInWithOAuth({ provider: 'google', options: { redirectTo } }); if (error) throw error; },
     async signOut() { await loadSb(); await sb.auth.signOut(); },
     onAuth(fn) { if (!CLOUD) return; loadSb().then(() => sb.auth.onAuthStateChange((_e, session) => fn(session && session.user || null))); },
+    async whoami() { if (!CLOUD) return null; await loadSb(); const { data, error } = await sb.rpc('whoami'); if (error) return { error: error.message }; return data; },
     isAdmin(user) { const list = (cfg.ADMIN_EMAILS || []).map(e => String(e).toLowerCase()); return !!(user && user.email && list.includes(user.email.toLowerCase())); }
   };
   window.RiaWorks = RiaWorks;

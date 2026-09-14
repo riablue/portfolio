@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <script src="./support.js"></script>
 </head>
 <body>
@@ -15,6 +15,8 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400&family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;1,6..96,400&family=Archivo+Black&family=Pinyon+Script&family=Jost:wght@400;500&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
+  html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+  img { max-width: 100%; }
   html { scroll-behavior: smooth; }
   body { margin: 0; background: #e6e9ed; }
   a { color: #6f7379; text-decoration: none; }
@@ -23,7 +25,7 @@
   @keyframes tw-blink { 0%,49% { visibility: visible } 50%,100% { visibility: hidden } }
 </style>
 </helmet>
-<div style="--accent: {{ accent }}; width:100%; max-width:390px; margin:0 auto; background:#f4f6f8; color:#3a3a38; font-family:'Space Mono',ui-monospace,monospace; overflow-x:clip; min-height:100vh">
+<div style="--accent: {{ accent }}; width:100%; max-width:390px; margin:0 auto; container-type:inline-size; background:#f4f6f8; color:#3a3a38; font-family:'Space Mono',ui-monospace,monospace; overflow-x:clip; min-height:100svh">
 
   <svg width="0" height="0" aria-hidden="true" style="position:absolute">
     <filter id="m-spray-far" x="-25%" y="-25%" width="150%" height="150%">
@@ -59,31 +61,31 @@
     <div style="height:1px; margin:0 16px; background:#6f7379"></div>
   </header>
 
-  <div id="top" style="position:relative; min-height:calc(100vh - 76px)">
+  <div id="top" style="position:relative; min-height:calc(100svh - 76px)">
     <div style="position:absolute; inset:0; z-index:0; pointer-events:none; overflow:hidden">
       <div style="position:absolute; top:46%; left:50%; transform:translate(-50%,-50%); width:78%; aspect-ratio:1">
         <div data-star-group style="position:absolute; inset:0; opacity:0; transform-origin:center; will-change:opacity,transform">
           <img data-star src="assets/star-main.png" alt="" aria-hidden="true" style="position:absolute; inset:0; width:100%; height:100%; opacity:.28; transform:scale(0); transform-origin:50% 50%; will-change:transform">
-          <img data-spark="a" src="assets/spark-1.png" alt="" aria-hidden="true" style="position:absolute; left:8.33%; top:10.47%; width:20.24%; height:20.93%; opacity:.28; transform:scale(0); transform-origin:50% 50%; will-change:transform">
-          <img data-spark="b" src="assets/spark-2.png" alt="" aria-hidden="true" style="position:absolute; left:61.31%; top:63.95%; width:17.86%; height:17.44%; opacity:.28; transform:scale(0); transform-origin:50% 50%; will-change:transform">
+          <img data-spark="a" src="assets/spark-1.png" alt="" aria-hidden="true" style="position:absolute; left:8.33%; top:10.47%; width:21%; height:21%; opacity:.28; transform:scale(0); transform-origin:50% 50%; will-change:transform">
+          <img data-spark="b" src="assets/spark-2.png" alt="" aria-hidden="true" style="position:absolute; left:61.31%; top:63.95%; width:18%; height:18%; opacity:.28; transform:scale(0); transform-origin:50% 50%; will-change:transform">
         </div>
       </div>
     </div>
 
-    <section style="position:relative; z-index:1; min-height:calc(100vh - 76px); display:grid; grid-template-rows:auto 1fr auto; padding:0 16px 16px; box-sizing:border-box">
+    <section style="position:relative; z-index:1; min-height:calc(100svh - 76px); display:grid; grid-template-rows:auto 1fr auto; padding:0 16px 16px; box-sizing:border-box">
       <div style="display:flex; flex-direction:column; gap:2px; padding:12px 0 0; font-size:10px; letter-spacing:.1em; color:#8d9095">
         <span style="font-family:'Courier Prime',ui-monospace,monospace; letter-spacing:.06em; color:#585b60">a little curious, a lot of ideas.</span>
         <span style="letter-spacing:.16em">PORTFOLIO&nbsp; /&nbsp; 2026</span>
       </div>
 
       <div style="display:grid; align-content:center; gap:4px; min-height:0">
-        <h1 data-reveal style="position:relative; margin:0; font-family:'Archivo Black',sans-serif; font-weight:400; font-size:clamp(58px,20vw,92px); line-height:.86; letter-spacing:-.035em; text-align:center; color:#5a5d63; isolation:isolate">
+        <h1 data-reveal style="position:relative; margin:0; font-family:'Archivo Black',sans-serif; font-weight:400; font-size:clamp(58px,20cqw,92px); line-height:.86; letter-spacing:-.035em; text-align:center; color:#5a5d63; isolation:isolate">
           <span aria-hidden="true" style="position:absolute; inset:0; filter:blur(8px) url(#m-spray-far); opacity:.42; color:#5a5d63">RIA<br>HAN</span>
           <span aria-hidden="true" style="position:absolute; inset:0; filter:blur(2.5px) url(#m-spray-mid); opacity:.6; color:#5a5d63">RIA<br>HAN</span>
           <span style="position:relative; color:#5a5d63; filter:blur(.4px) url(#m-spray-near)">RIA<br>HAN</span>
         </h1>
 
-        <div data-reveal style="font-family:'Pinyon Script',cursive; font-size:clamp(42px,13vw,62px); line-height:.9; color:var(--accent,#e29ec8); text-align:center; white-space:nowrap">where a vision</div>
+        <div data-reveal style="display:flex; justify-content:center; padding:2px 0 0"><img src="assets/where-a-vision.png" alt="where a vision" style="display:block; width:88%; height:auto"></div>
 
         <ol data-reveal style="list-style:none; margin:14px 0 0; padding:0; display:grid; grid-template-columns:1fr 1fr; gap:2px 12px; font-size:10px; letter-spacing:.12em; line-height:2; color:#8d9095">
           <li><span style="color:var(--accent,#e29ec8)">01</span>&nbsp; /&nbsp; CONTENT</li>
@@ -94,7 +96,7 @@
       </div>
 
       <div style="display:flex; flex-direction:column; gap:10px">
-        <h2 data-reveal style="margin:0; font-family:'Archivo Black',sans-serif; font-weight:400; font-size:clamp(22px,7.4vw,32px); letter-spacing:-.03em; color:#5a5d63">takes shape<span style="color:var(--accent,#e29ec8); font-family:'Space Mono',monospace; font-size:.78em">✳</span></h2>
+        <h2 data-reveal style="margin:0; font-family:'Archivo Black',sans-serif; font-weight:400; font-size:clamp(22px,7.4cqw,32px); letter-spacing:-.03em; color:#5a5d63">takes shape<span style="color:var(--accent,#e29ec8); font-family:'Space Mono',monospace; font-size:.78em">✳</span></h2>
 
         <p data-reveal style="margin:0; font-size:11px; line-height:1.8; color:#8d9095">Content, styling &amp; creative production<br>Los Angeles, CA</p>
       </div>
@@ -132,11 +134,11 @@
     </div>
 
     <div data-reveal style="padding:22px 16px 0">
-      <div style="position:relative; font-family:'Bodoni Moda','Didot',serif; font-weight:400; font-size:clamp(40px,13vw,58px); line-height:.82; letter-spacing:-.03em; color:#5a5d63">
+      <div style="position:relative; font-family:'Bodoni Moda','Didot',serif; font-weight:400; font-size:clamp(40px,13cqw,58px); line-height:.82; letter-spacing:-.03em; color:#5a5d63">
         <div style="display:flex; justify-content:space-between; align-items:baseline; gap:.5em; padding-right:.1em"><span>in front</span><span style="font-size:.5em; letter-spacing:-.01em">of the</span></div>
         <div style="padding-left:2.3em; margin-top:-.06em"><span style="position:relative; display:inline-block; padding:0 .08em; isolation:isolate"><span aria-hidden="true" style="position:absolute; left:-.1em; right:-.1em; top:22%; bottom:14%; z-index:-1; background:var(--accent,#e29ec8); opacity:.34; filter:blur(1.5px) url(#m-spray-near)"></span><span aria-hidden="true" style="position:absolute; left:-.2em; right:-.25em; top:14%; bottom:6%; z-index:-1; background:var(--accent,#e29ec8); opacity:.16; filter:blur(6px) url(#m-spray-mid)"></span>camera</span></div>
       </div>
-      <div data-typewriter="behind the|whole thing." style="font-family:'Pinyon Script',cursive; font-size:clamp(30px,9.6vw,42px); line-height:.9; color:var(--accent,#e29ec8); margin-top:-.28em; min-height:1.9em; display:block; position:relative; z-index:1">behind the<br>whole thing.</div>
+      <div data-typewriter="behind the|whole thing." style="font-family:'Pinyon Script',cursive; font-size:clamp(30px,9.6cqw,42px); line-height:.9; color:var(--accent,#e29ec8); margin-top:-.28em; min-height:1.9em; display:block; position:relative; z-index:1">behind the<br>whole thing.</div>
       <div style="margin-top:.2em; height:1px; background:#3a3a38"></div>
       <div style="display:grid; grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr); margin-top:14px">
         <p style="margin:0; padding-right:12px; font-family:'Bodoni Moda','Didot',serif; color:#6f7379; font-size:15px; line-height:1.35; text-wrap:pretty">I’m Ria, a creative based in Los Angeles.</p>
@@ -145,7 +147,7 @@
       <img src="assets/signature.png" alt="Ria" style="display:block; margin:10px 0 0 auto; width:84px; height:auto; opacity:.85">
     </div>
 
-    <h2 data-reveal style="margin:26px 16px 0; font-family:'Archivo Black',sans-serif; font-weight:400; font-size:clamp(26px,8.6vw,38px); letter-spacing:-.035em; color:#5a5d63">take a closer look.<span style="color:var(--accent,#e29ec8); font-family:'Space Mono',monospace; font-size:.72em">✳</span></h2>
+    <h2 data-reveal style="margin:26px 16px 0; font-family:'Archivo Black',sans-serif; font-weight:400; font-size:clamp(26px,8.6cqw,38px); letter-spacing:-.035em; color:#5a5d63">take a closer look.<span style="color:var(--accent,#e29ec8); font-family:'Space Mono',monospace; font-size:.72em">✳</span></h2>
   </section>
 
   <section id="work" style="padding:28px 16px 24px">
@@ -185,7 +187,7 @@
     </div>
 
     <div data-reveal style="position:relative; width:100%; margin:16px auto 0">
-      <div data-env-stage style="position:relative; width:100%; aspect-ratio:1036/939">
+      <div data-env-stage style="position:relative; width:100%; aspect-ratio:1045/943">
         <img src="assets/env-final.png" alt="An open light blue envelope with a lace-edged note: a little note for you — get some idea? let’s make things happen together. Email riablue.collab@gmail.com, Los Angeles, CA. Ria." style="position:absolute; inset:0; width:100%; height:100%">
         <a href="mailto:riablue.collab@gmail.com" title="riablue.collab@gmail.com" style="position:absolute; left:30%; top:46.5%; width:38%; height:6%; cursor:pointer"><span style="position:absolute; inset:0; overflow:hidden; clip-path:inset(50%)">Email riablue.collab@gmail.com</span></a>
       </div>
@@ -206,7 +208,7 @@
         <button onClick="{{ closeCat }}" style="font-family:'Jost',sans-serif; font-size:13px; color:#4a4d52; background:none; border:1px solid #3a3a38; padding:6px 10px; cursor:pointer; white-space:nowrap; flex:none" style-hover="background:#e9edf1">close ✕</button>
       </div>
       <div style="display:flex; align-items:baseline; gap:.4em; flex-wrap:wrap; margin-top:22px">
-        <h2 style="margin:0; font-family:'Bodoni Moda','Didot',serif; font-weight:400; font-size:clamp(40px,13vw,58px); line-height:.9; letter-spacing:-.03em; color:#5a5d63">{{ catTitle }}</h2>
+        <h2 style="margin:0; font-family:'Bodoni Moda','Didot',serif; font-weight:400; font-size:clamp(40px,13cqw,58px); line-height:.9; letter-spacing:-.03em; color:#5a5d63">{{ catTitle }}</h2>
       </div>
       <sc-if value="{{ catEmpty }}" hint-placeholder-val="{{ false }}">
         <div style="margin-top:28px; display:grid; gap:14px">
@@ -259,7 +261,7 @@
         </div>
         <div style="display:flex; flex-direction:column; gap:14px; max-width:none">
           <div style="font-family:'Courier Prime',ui-monospace,monospace; font-size:11px; letter-spacing:.16em; color:#4a4d52">{{ lbNum }}<sc-if value="{{ lbMulti }}" hint-placeholder-val="{{ false }}">&nbsp; ·&nbsp; {{ lbImgPos }}</sc-if></div>
-          <h3 style="margin:0; font-family:'Bodoni Moda','Didot',serif; font-weight:400; font-size:clamp(26px,8vw,36px); line-height:1.02; letter-spacing:-.02em; color:#5a5d63; text-wrap:balance">{{ lbTitle }}</h3>
+          <h3 style="margin:0; font-family:'Bodoni Moda','Didot',serif; font-weight:400; font-size:clamp(26px,8cqw,36px); line-height:1.02; letter-spacing:-.02em; color:#5a5d63; text-wrap:balance">{{ lbTitle }}</h3>
           <div style="height:1px; background:#3a3a38; width:64px"></div>
           <p style="margin:0; font-family:'Jost',sans-serif; font-size:15px; line-height:1.65; color:#6f7379; white-space:pre-wrap; text-wrap:pretty">{{ lbDesc }}</p>
         </div>
@@ -406,11 +408,18 @@ class Component extends DCLogic {
     });
     const run = () => {
       const p = window.scrollY / Math.max(1, window.innerHeight);
-      if (star && this._starReady) star.style.opacity = (0.28 + 0.075 * Math.sin(p * 9)).toFixed(3);
+      if (star && this._starReady) {
+        const f = 0.5 + 0.22 * Math.sin(p * 9.3) + 0.16 * Math.sin(p * 23.7 + 1.3) + 0.12 * Math.sin(p * 41.1 + 2.9);
+        const spike = Math.pow(Math.max(0, Math.sin(p * 61 + 0.7)), 14);
+        star.style.opacity = Math.max(0.1, Math.min(0.42, 0.14 + 0.28 * f - 0.14 * spike)).toFixed(3);
+      }
       if (sparkA && sparkB) {
-        const phase = 0.5 + 0.5 * Math.sin(p * 12);
-        sparkA.style.opacity = (0.12 + 0.32 * phase).toFixed(3);
-        sparkB.style.opacity = (0.12 + 0.32 * (1 - phase)).toFixed(3);
+        const a = 0.5 + 0.3 * Math.sin(p * 13.1) + 0.2 * Math.sin(p * 34.7 + 0.8);
+        const b = 0.5 + 0.3 * Math.sin(p * 11.3 + 2.1) + 0.2 * Math.sin(p * 29.9 + 1.7);
+        const blinkA = Math.pow(Math.max(0, Math.sin(p * 53 + 0.4)), 18);
+        const blinkB = Math.pow(Math.max(0, Math.sin(p * 47 + 2.6)), 18);
+        sparkA.style.opacity = Math.max(0.05, Math.min(0.48, 0.1 + 0.34 * a - 0.3 * blinkA)).toFixed(3);
+        sparkB.style.opacity = Math.max(0.05, Math.min(0.48, 0.1 + 0.34 * b - 0.3 * blinkB)).toFixed(3);
       }
       types.forEach(el => {
         const full = el.getAttribute('data-typewriter') || '';
@@ -528,10 +537,10 @@ class Component extends DCLogic {
       lbImg: cur ? (cur.img || cur.thumb || '') : '',
       lbIsVideo: !!embed,
       lbLink: cur ? (cur.link || '') : '',
-      lbVideo: embed ? React.createElement('iframe', { key: embed, src: embed, title: cur.title || 'Instagram video', allow: 'autoplay; encrypted-media; fullscreen', allowFullScreen: true, scrolling: 'no', frameBorder: '0', style: { width: '100%', maxWidth: '340px', height: 'min(72vh, 640px)', minHeight: '320px', border: '0', background: '#fff' } }) : null,
+      lbVideo: embed ? React.createElement('iframe', { key: embed, src: embed, title: cur.title || 'Instagram video', allow: 'autoplay; encrypted-media; fullscreen', allowFullScreen: true, scrolling: 'no', frameBorder: '0', style: { width: '100%', maxWidth: '340px', height: 'min(72svh, 640px)', minHeight: '320px', border: '0', background: '#fff' } }) : null,
       galDisplay: embed ? 'none' : 'flex',
       lbAlign: embed ? 'start' : 'center',
-      lbImages: imgs.map(im => ({ src: im.src, style: { width: '100%', height: '58vh', backgroundImage: 'url("' + im.src + '")', backgroundSize: 'contain', backgroundPosition: 'center', backgroundRepeat: 'no-repeat', userSelect: 'none' } })),
+      lbImages: imgs.map(im => ({ src: im.src, style: { width: '100%', height: '58svh', backgroundImage: 'url("' + im.src + '")', backgroundSize: 'contain', backgroundPosition: 'center', backgroundRepeat: 'no-repeat', userSelect: 'none' } })),
       lbMulti: !embed && imgs.length > 1,
       lbImgPos: (this.state.gi + 1) + ' / ' + imgs.length,
       lbDots: imgs.map((im, i) => ({ bg: i === this.state.gi ? '#3a3a38' : 'transparent', go: (e) => { e.stopPropagation(); this.galTo(i); } })),

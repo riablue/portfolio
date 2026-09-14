@@ -157,7 +157,16 @@ class Component extends DCLogic {
       this.setState({ user, authChecked: true });
       W.onAuth(u => { this.setState({ user: u }); if (W.isAdmin(u)) this.load(); });
       if (W.isAdmin(user)) this.load();
+      if (user) this.checkServer();
     } catch (e) { this.setState({ authChecked: true, authError: String(e && e.message || e) }); }
+  }
+  async checkServer() {
+    const W = window.RiaWorks; if (!W || !W.CLOUD) return;
+    const who = await W.whoami();
+    if (!who) return;
+    if (who.error) { this.setState({ saved: 'SERVER CHECK FAILED: ' + who.error + ' — run supabase-patch-1.sql' }); return; }
+    if (!who.is_admin) this.setState({ saved: 'SERVER SAYS NOT ADMIN (' + (who.email || 'no email in token') + ') — add this email to the admins table' });
+    else this.setState({ saved: 'CLOUD · ' + who.email });
   }
   async load() {
     if (!window.RiaWorks) return;
