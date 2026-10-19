@@ -291,7 +291,7 @@ class Component extends DCLogic {
   }
   async loadWorks() {
     if (!window.RiaWorks) { setTimeout(() => this.loadWorks(), 200); return; }
-    try { const works = await window.RiaWorks.all(); this.setState({ works }); } catch (e) { this.setState({ works: {} }); }
+    try { const works = await window.RiaWorks.all(); this.setState({ works }, () => this.openFromHash()); } catch (e) { this.setState({ works: {} }); }
     if (!this._worksBound) { this._worksBound = true; window.RiaWorks.onChange(() => this.loadWorks()); }
   }
   initFlipGrid() {
@@ -503,16 +503,47 @@ class Component extends DCLogic {
     setTimeout(run, 500);
   }
   // history: each level (category, lightbox) pushes an entry; browser back returns one level
+  urlFor(s) {
+    const base = location.pathname + location.search;
+    if (!s || !s.cat) return base;
+    const l = (this.state.works && this.state.works[s.cat]) || [];
+    const w = s.lb !== null && s.lb !== undefined ? l[s.lb] : null;
+    return base + (w ? '#/work/' + w.id : '#/' + s.cat.toLowerCase());
+  }
+  openFromHash() {
+    if (this._hashDone || !this.state.works) return;
+    this._hashDone = true;
+    const m = location.hash.match(/^#\/(?:work\/([A-Za-z0-9_-]+)|([a-z]+))$/);
+    if (!m) return;
+    const works = this.state.works;
+    if (m[1]) {
+      for (const cat of Object.keys(works)) {
+        const lb = works[cat].findIndex(w => w.id === m[1]);
+        if (lb >= 0) {
+          try { history.replaceState({ ria: { cat, lb: null, gi: 0 } }, '', this.urlFor({ cat, lb: null })); history.pushState({ ria: { cat, lb, gi: 0 } }, '', this.urlFor({ cat, lb })); } catch (e) {}
+          this.setState({ cat, lb, gi: 0 }); return;
+        }
+      }
+      try { history.replaceState(null, '', this.urlFor(null)); } catch (e) {}
+    } else {
+      const cat = m[2].toUpperCase();
+      if (works[cat]) { try { history.replaceState({ ria: { cat, lb: null, gi: 0 } }, '', this.urlFor({ cat, lb: null })); } catch (e) {} this.setState({ cat, lb: null, gi: 0 }); }
+    }
+  }
   pushLevel(next) {
     const cur = { cat: this.state.cat, lb: this.state.lb, gi: this.state.gi };
-    try { history.replaceState({ ria: cur }, ''); history.pushState({ ria: next }, ''); } catch (e) {}
+    try { history.replaceState({ ria: cur }, '', this.urlFor(cur)); history.pushState({ ria: next }, '', this.urlFor(next)); } catch (e) {}
     this.setState(next);
   }
   back(e) {
     if (e && e.stopPropagation) e.stopPropagation();
     if (this._backing) return;
     if (history.state && history.state.ria) { this._backing = true; setTimeout(() => { this._backing = false; }, 400); history.back(); }
-    else this.setState(this.state.lb !== null ? { lb: null } : { cat: null, lb: null });
+    else {
+      const next = this.state.lb !== null ? { cat: this.state.cat, lb: null, gi: 0 } : { cat: null, lb: null, gi: 0 };
+      try { history.replaceState(next.cat ? { ria: next } : null, '', this.urlFor(next)); } catch (e) {}
+      this.setState(next);
+    }
   }
   componentDidMount() {
     this.loadWorks();
@@ -582,7 +613,9 @@ class Component extends DCLogic {
     const list = (this.state.works && this.state.cat && this.state.works[this.state.cat]) || [];
     if (!list.length || this.state.lb === null) return;
     document.querySelectorAll('[data-gallery] video').forEach(v => { try { v.pause(); } catch (e) {} });
-    this.setState({ lb: (this.state.lb + d + list.length) % list.length, gi: 0 });
+    const nlb = (this.state.lb + d + list.length) % list.length;
+    try { history.replaceState({ ria: { cat: this.state.cat, lb: nlb, gi: 0 } }, '', this.urlFor({ cat: this.state.cat, lb: nlb })); } catch (e) {}
+    this.setState({ lb: nlb, gi: 0 });
     requestAnimationFrame(() => { const g = document.querySelector('[data-gallery]'); if (g) g.scrollTo({ left: 0, behavior: 'auto' }); });
   }
   renderVals() {
