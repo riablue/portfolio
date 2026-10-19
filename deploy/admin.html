@@ -13,7 +13,7 @@
 <link rel="icon" type="image/png" sizes="192x192" href="assets/favicon-192.png?v=2">
 <link rel="apple-touch-icon" href="assets/favicon.png?v=2">
 <script src="./supabase-config.js"></script>
-<script src="./works-store.js"></script>
+<script src="./works-store.js?v=4"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -95,11 +95,13 @@
         <label style="display:grid; gap:6px; font-size:12px; letter-spacing:.06em; color:#6f7379">DESCRIPTION
           <textarea value="{{ fDesc }}" onChange="{{ setDesc }}" rows="5" placeholder="A few lines about the piece — client, role, what you did." style="border:1px solid rgba(58,58,56,.4); background:transparent; padding:10px 12px; font-size:15px; line-height:1.55; color:#3a3a38; resize:vertical; outline:none"></textarea>
         </label>
-        <div style="display:grid; gap:8px; font-size:12px; letter-spacing:.06em; color:#6f7379">IMAGES <span style="letter-spacing:0; color:#8d9095">— first one is the cover; several make a swipe gallery</span>
+        <div style="display:grid; gap:8px; font-size:12px; letter-spacing:.06em; color:#6f7379">IMAGES &amp; VIDEOS <span style="letter-spacing:0; color:#8d9095">— first one is the cover; several make a swipe gallery</span>
           <div style="display:flex; flex-wrap:wrap; gap:10px; align-items:flex-start">
             <sc-for list="{{ imgs }}" as="im" hint-placeholder-count="0">
               <div style="position:relative; width:72px; flex:none">
                 <div style="{{ im.style }}"></div>
+                <sc-if value="{{ im.isVideo }}" hint-placeholder-val="{{ false }}"><label title="upload a cover image for this video" style="display:block; margin-top:2px; text-align:center; font-family:'Courier Prime',ui-monospace,monospace; font-size:10px; letter-spacing:.06em; color:#4a4d52; border:1px solid rgba(58,58,56,.4); padding:3px 0; cursor:pointer" style-hover="background:#e9edf1">cover ↑<input type="file" accept="image/*" onChange="{{ im.setCover }}" style="display:none"></label></sc-if>
+                <sc-if value="{{ im.isVideo }}" hint-placeholder-val="{{ false }}"><span style="position:absolute; left:4px; bottom:44px; font-family:'Courier Prime',ui-monospace,monospace; font-size:10px; letter-spacing:.08em; color:#f4f6f8; background:rgba(58,58,56,.75); padding:2px 5px">▶ VIDEO</span></sc-if>
                 <button type="button" onClick="{{ im.remove }}" title="remove" style="position:absolute; top:-6px; right:-6px; width:20px; height:20px; border-radius:50%; border:1px solid #3a3a38; background:#f4f6f8; color:#4a4d52; font-size:11px; cursor:pointer; line-height:1; padding:0">✕</button>
                 <div style="display:flex; justify-content:space-between; margin-top:4px">
                   <button type="button" onClick="{{ im.left }}" style="background:none; border:0; padding:0 2px; cursor:pointer; color:#8d9095; font-size:12px">←</button>
@@ -108,7 +110,7 @@
                 </div>
               </div>
             </sc-for>
-            <label style="width:72px; aspect-ratio:4/5; flex:none; border:1px dashed rgba(58,58,56,.5); display:flex; align-items:center; justify-content:center; cursor:pointer; color:#4a4d52; font-size:22px; line-height:1" style-hover="background:#e9edf1" title="add images">+<input type="file" accept="image/*" multiple="{{ true }}" onChange="{{ addFiles }}" style="display:none"></label>
+            <label style="width:72px; aspect-ratio:4/5; flex:none; border:1px dashed rgba(58,58,56,.5); display:flex; align-items:center; justify-content:center; cursor:pointer; color:#4a4d52; font-size:22px; line-height:1" style-hover="background:#e9edf1" title="add images or videos">+<input type="file" accept="image/*,video/mp4,video/quicktime,video/webm" multiple="{{ true }}" onChange="{{ addFiles }}" style="display:none"></label>
           </div>
         </div>
         <div style="display:flex; align-items:center; gap:12px; margin-top:4px">
@@ -232,6 +234,14 @@ class Component extends DCLogic {
       imgs: this.state.imgs.map((im, i, arr) => ({
         style: { width: '72px', aspectRatio: '4/5', display: 'block', backgroundColor: '#e9edf1', backgroundImage: 'url("' + (im.thumb || im.src || '') + '")', backgroundSize: 'cover', backgroundPosition: 'center', outline: i === 0 ? '2px solid #e29ec8' : 'none' },
         num: pad2(i),
+        isVideo: !!im.video,
+        setCover: async e => {
+          const f = (e.target.files || [])[0]; e.target.value = '';
+          if (!f || !window.RiaWorks) return;
+          this.flash('processing cover…');
+          try { const c = await window.RiaWorks.processCover(f); const a = this.state.imgs.slice(); a[i] = Object.assign({}, a[i], c); this.setState({ imgs: a }); this.flash('cover set — save to publish'); }
+          catch (err) { this.flash('could not read that image'); }
+        },
         outline: i === 0 ? '2px solid #e29ec8' : 'none',
         remove: () => this.setState({ imgs: arr.filter((_, k) => k !== i) }),
         left: () => { if (i === 0) return; const a = arr.slice(); [a[i - 1], a[i]] = [a[i], a[i - 1]]; this.setState({ imgs: a }); },
@@ -240,9 +250,9 @@ class Component extends DCLogic {
       addFiles: async e => {
         const fl = Array.from(e.target.files || []); e.target.value = '';
         if (!fl.length || !window.RiaWorks) return;
-        this.flash('processing ' + fl.length + ' image' + (fl.length > 1 ? 's' : '') + '…');
+        this.flash('processing ' + fl.length + ' file' + (fl.length > 1 ? 's' : '') + '…');
         const out = [];
-        for (const f of fl) out.push(await window.RiaWorks.processFile(f));
+        for (const f of fl) { try { out.push(await window.RiaWorks.processFile(f)); } catch (err) { alert((f.name || 'file') + ': ' + (err && err.message || err)); } }
         this.setState({ imgs: this.state.imgs.concat(out) }); this.flash('');
       },
       submitLabel: editing ? 'save changes' : 'add to ' + labels[this.state.cat],
@@ -251,7 +261,7 @@ class Component extends DCLogic {
         e.preventDefault();
         if (!window.RiaWorks) return;
         if (!this.state.imgs.length) { this.flash('add at least one image'); return; }
-        this.flash('saving…');
+        this.flash(this.state.imgs.some(im => im._video) ? 'uploading video… keep this tab open' : 'saving…');
         try {
           if (!this.igOk(this.state.link)) { this.flash('check the Instagram link'); return; }
           if (editing) await window.RiaWorks.update(this.state.editId, { title: this.state.title, desc: this.state.desc, link: this.state.link, images: this.state.imgs });
@@ -262,7 +272,7 @@ class Component extends DCLogic {
       },
       empty: !!this.state.works && list.length === 0,
       rows: list.map((w, i) => ({
-        num: pad2(i) + ((w.images && w.images.length > 1) ? ' ×' + w.images.length : '') + (w.link ? ' ▶' : ''),
+        num: pad2(i) + ((w.images && w.images.length > 1) ? ' ×' + w.images.length : '') + ((w.link || (w.images || []).some(im => im.video)) ? ' ▶' : ''),
         style: { width: '64px', aspectRatio: '4/5', display: 'block', backgroundColor: '#e9edf1', backgroundImage: 'url("' + (w.thumb || w.img || '') + '")', backgroundSize: 'cover', backgroundPosition: 'center' },
         title: w.title || '(untitled)',
         desc: w.desc || '',

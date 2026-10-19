@@ -21,9 +21,44 @@
     img.onerror = rej;
     img.src = url;
   });
+  const MAX_VIDEO_MB = 50;
+  const posterOf = (file) => new Promise((res, rej) => {
+    const url = URL.createObjectURL(file);
+    const v = document.createElement('video');
+    v.muted = true; v.playsInline = true; v.preload = 'auto';
+    v.onloadeddata = () => { v.currentTime = Math.min(0.5, (v.duration || 1) / 2); };
+    v.onseeked = () => {
+      const draw = (max, q) => new Promise(r => {
+        const k = Math.min(1, max / Math.max(v.videoWidth, v.videoHeight));
+        const c = document.createElement('canvas');
+        c.width = Math.round(v.videoWidth * k); c.height = Math.round(v.videoHeight * k);
+        c.getContext('2d').drawImage(v, 0, 0, c.width, c.height);
+        c.toBlob(blob => r({ blob, src: CLOUD ? URL.createObjectURL(blob) : c.toDataURL('image/jpeg', q), w: c.width, h: c.height }), 'image/jpeg', q);
+      });
+      Promise.all([draw(1800, .86), draw(480, .8)]).then(([big, th]) => { res({ big, th, url }); });
+    };
+    v.onerror = () => { URL.revokeObjectURL(url); rej(new Error('this video format can’t be read — export as MP4 (H.264)')); };
+    v.src = url;
+  });
+  const readDataURL = (file) => new Promise((res, rej) => { const r = new FileReader(); r.onload = () => res(r.result); r.onerror = rej; r.readAsDataURL(file); });
+  const processVideo = async (file) => {
+    if (file.size > MAX_VIDEO_MB * 1024 * 1024) throw new Error('video is ' + Math.round(file.size / 1048576) + ' MB — max ' + MAX_VIDEO_MB + ' MB. Compress it first.');
+    const { big, th, url } = await posterOf(file);
+    const ext = ((file.name.match(/\.([a-z0-9]+)$/i) || [])[1] || 'mp4').toLowerCase();
+    const out = { src: big.src, thumb: th.src, w: big.w, h: big.h, video: CLOUD ? url : await readDataURL(file), vext: ext, vtype: file.type || 'video/mp4' };
+    if (CLOUD) { out._big = big.blob; out._thumb = th.blob; out._video = file; } else URL.revokeObjectURL(url);
+    return out;
+  };
   const processFile = async (file) => {
+    if (file.type && file.type.indexOf('video/') === 0) return processVideo(file);
     const big = await resize(file, 1800, .86), th = await resize(file, 480, .8);
     const out = { src: big.src, thumb: th.src, w: big.w, h: big.h };
+    if (CLOUD) { out._big = big.blob; out._thumb = th.blob; }
+    return out;
+  };
+  const processCover = async (file) => {
+    const big = await resize(file, 1800, .86), th = await resize(file, 480, .8);
+    const out = { src: big.src, thumb: th.src, w: big.w, h: big.h, customCover: true };
     if (CLOUD) { out._big = big.blob; out._thumb = th.blob; }
     return out;
   };
@@ -56,7 +91,7 @@
     async getAll() { return (await tx('readonly', s => s.getAll())) || []; },
     async put(rows) { await tx('readwrite', s => rows.forEach(r => s.put(r))); localNotify(); },
     async del(id) { await tx('readwrite', s => s.delete(id)); localNotify(); },
-    async prepareImages(images) { return images.map(im => { const o = Object.assign({}, im); delete o._big; delete o._thumb; return o; }); },
+    async prepareImages(images) { return images.map(im => { const o = Object.assign({}, im); delete o._big; delete o._thumb; delete o._video; return o; }); },
     async removeImages() {},
     listen() { if (bc) bc.addEventListener('message', emit); window.addEventListener('storage', e => { if (e.key === 'ria-works-ping') emit(); }); }
   };
@@ -79,20 +114,25 @@
     async del(id) { await loadSb(); const { error } = await sb.from('works').delete().eq('id', id); if (error) throw error; emit(); },
     async prepareImages(images, itemId) {
       await loadSb();
-      const out = [];
+      const out = [], stale = [];
       for (const im of images) {
-        if (!im._big) { const o = Object.assign({}, im); delete o._big; delete o._thumb; out.push(o); continue; }
+        if (!im._big) { const o = Object.assign({}, im); delete o._big; delete o._thumb; delete o._video; out.push(o); continue; }
         const key = itemId + '/' + uid();
-        const up = async (path, blob) => { const { error } = await sb.storage.from('works').upload(path, blob, { contentType: 'image/jpeg', upsert: true }); if (error) throw error; return sb.storage.from('works').getPublicUrl(path).data.publicUrl; };
+        const up = async (path, blob, type) => { const { error } = await sb.storage.from('works').upload(path, blob, { contentType: type || 'image/jpeg', upsert: true }); if (error) throw error; return sb.storage.from('works').getPublicUrl(path).data.publicUrl; };
         const src = await up(key + '.jpg', im._big), thumb = await up(key + '-thumb.jpg', im._thumb);
-        out.push({ src, thumb, w: im.w, h: im.h, path: key });
+        const rec = { src, thumb, w: im.w, h: im.h, path: key };
+        if (im.customCover) rec.customCover = true;
+        if (im._video) { rec.vpath = key + '.' + im.vext; rec.video = await up(rec.vpath, im._video, im.vtype); rec.vext = im.vext; rec.vtype = im.vtype; }
+        else if (im.video) { rec.video = im.video; rec.vext = im.vext; rec.vtype = im.vtype; rec.vpath = im.vpath || (im.path ? im.path + '.' + im.vext : undefined); if (im.path) stale.push(im.path + '.jpg', im.path + '-thumb.jpg'); }
+        out.push(rec);
       }
+      if (stale.length) sb.storage.from('works').remove(stale).catch(() => {});
       return out;
     },
     async removeImages(images) {
       await loadSb();
       const paths = [];
-      (images || []).forEach(im => { if (im.path) paths.push(im.path + '.jpg', im.path + '-thumb.jpg'); });
+      (images || []).forEach(im => { if (im.path) { paths.push(im.path + '.jpg', im.path + '-thumb.jpg'); if (im.vext) paths.push(im.vpath || (im.path + '.' + im.vext)); } });
       if (paths.length) await sb.storage.from('works').remove(paths);
     },
     listen() { loadSb().then(() => { sb.channel('works-live').on('postgres_changes', { event: '*', schema: 'public', table: 'works' }, emit).subscribe(); }).catch(() => {}); }
@@ -102,7 +142,7 @@
   A.listen();
 
   const RiaWorks = {
-    CATS, CLOUD, processFile,
+    CATS, CLOUD, processFile, processCover,
     async all() {
       const rows = await A.getAll();
       const out = {}; CATS.forEach(c => out[c] = []);
