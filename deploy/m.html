@@ -221,7 +221,7 @@
           <sc-for list="{{ catWorks }}" as="w" hint-placeholder-count="0">
             <a href="#" onClick="{{ w.open }}" style="display:flex; flex-direction:column; gap:14px; cursor:zoom-in; text-decoration:none; color:inherit">
               <div style="display:flex; justify-content:center"><div style="position:relative"><div role="img" aria-label="{{ w.title }}" style="{{ w.style }}" style-hover="transform:scale(1.04)"></div><sc-if value="{{ w.isVideo }}" hint-placeholder-val="{{ false }}"><span style="position:absolute; right:6px; bottom:6px; display:flex; align-items:center; justify-content:center; font-size:12px; color:#3a3a38; text-shadow:0 0 6px rgba(244,246,248,.95); pointer-events:none">▶</span></sc-if></div></div>
-              <div style="font-family:'Courier Prime',ui-monospace,monospace; font-size:11px; letter-spacing:.12em; color:#4a4d52">{{ w.num }}</div>
+              <div style="display:grid; gap:4px; min-width:0"><div style="font-family:'Courier Prime',ui-monospace,monospace; font-size:11px; letter-spacing:.12em; color:#4a4d52">{{ w.num }}</div><sc-if value="{{ w.hasTitle }}" hint-placeholder-val="{{ false }}"><div style="font-family:'Courier Prime',ui-monospace,monospace; font-size:11px; letter-spacing:.06em; line-height:1.45; color:#4a4d52; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; text-wrap:pretty">{{ w.title }}</div></sc-if></div>
             </a>
           </sc-for>
         </div>
@@ -599,7 +599,7 @@ class Component extends DCLogic {
       catCount: pad2(list.length - 1),
       catEmpty: !!this.state.works && list.length === 0,
       catHas: list.length > 0,
-      catWorks: list.map((w, i) => ({ num: pad2(i), thumb: w.thumb || w.img || '', isVideo: !!this.igEmbed(w.link) || !!(w.images || []).some(im => im.video), style: { width: '72px', aspectRatio: '4/5', display: 'block', backgroundColor: '#e9edf1', backgroundImage: 'url("' + (w.thumb || w.img || '') + '")', backgroundSize: 'cover', backgroundPosition: 'center', transition: 'transform .35s cubic-bezier(.2,.8,.2,1)' }, title: w.title || '', open: (e) => { e.preventDefault(); this.pushLevel({ cat: this.state.cat, lb: i, gi: 0 }); } })),
+      catWorks: list.map((w, i) => ({ num: pad2(i), hasTitle: !!(w.title || '').trim(), thumb: w.thumb || w.img || '', isVideo: !!this.igEmbed(w.link) || !!(w.images || []).some(im => im.video), style: { width: '72px', aspectRatio: '4/5', display: 'block', backgroundColor: '#e9edf1', backgroundImage: 'url("' + (w.thumb || w.img || '') + '")', backgroundSize: 'cover', backgroundPosition: 'center', transition: 'transform .35s cubic-bezier(.2,.8,.2,1)' }, title: w.title || '', open: (e) => { e.preventDefault(); this.pushLevel({ cat: this.state.cat, lb: i, gi: 0 }); } })),
       lbOpen: !!cur,
       lbNum: cur ? pad2(this.state.lb) : '',
       lbImg: cur ? (cur.img || cur.thumb || '') : '',
